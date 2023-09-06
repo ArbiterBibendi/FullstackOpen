@@ -9,13 +9,19 @@ const Feedback = ({handlers}) =>{
     </>
   )
 }
-const Statistics = ({state}) => {
+const Statistics = ({good, neutral, bad}) => {
+  const totalVotes = good + neutral + bad;
+  const averageScore = (good - bad) / totalVotes;
+  const positiveFeedbackPercentage = good / totalVotes;
   return (
     <>
       <h1>statistics</h1>
-      <p>good {state.good}</p>
-      <p>neutral {state.neutral}</p>
-      <p>bad {state.bad}</p>
+      <p>good {good}</p>
+      <p>neutral {neutral}</p>
+      <p>bad {bad}</p>
+      <p>all {totalVotes}</p>
+      <p>average {averageScore}</p>
+      <p>positive {positiveFeedbackPercentage}</p>
     </>
   )
 }
@@ -43,7 +49,7 @@ const App = () => {
     <div>
       <h1>give feedback</h1>
       <Feedback handlers={ {handleGood, handleNeutral, handleBad} }/>
-      <Statistics state={ {good, bad, neutral} }/>
+      <Statistics good={good} neutral={neutral} bad={bad} />
     </div>
   )
 }
