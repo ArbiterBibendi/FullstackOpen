@@ -1,35 +1,55 @@
 import { useState } from 'react'
 
-const Feedback = ({handlers}) =>{
+
+const Button = ({ onClick, text }) => {
+  return (
+    <button onClick={onClick}>{text}</button>
+  )
+}
+const StatisticLine = ({ text, value }) => {
+  return (
+    <tbody>
+      <tr>
+        <td>
+          {text}
+        </td>
+        <td>
+          {value}
+        </td>
+      </tr>
+    </tbody>
+  )
+}
+const Feedback = ({ handlers }) => {
   return (
     <>
-      <button onClick={handlers.handleGood}>good</button>
-      <button onClick={handlers.handleNeutral}>neutral</button>
-      <button onClick={handlers.handleBad}>bad</button>
+      <Button text="good" onClick={handlers.handleGood} />
+      <Button text="neutral" onClick={handlers.handleNeutral} />
+      <Button text="bad" onClick={handlers.handleBad} />
     </>
   )
 }
-const Statistics = ({good, neutral, bad, isFeedbackGathered}) => {
+const Statistics = ({ good, neutral, bad, isFeedbackGathered }) => {
   const totalVotes = good + neutral + bad;
   const averageScore = (good - bad) / totalVotes;
   const positiveFeedbackPercentage = good / totalVotes;
-  if (isFeedbackGathered)
-  {
+  if (isFeedbackGathered) {
     return (
       <>
         <h1>statistics</h1>
-        <p>good {good}</p>
-        <p>neutral {neutral}</p>
-        <p>bad {bad}</p>
-        <p>all {totalVotes}</p>
-        <p>average {averageScore}</p>
-        <p>positive {positiveFeedbackPercentage}</p>
+        <table>
+          <StatisticLine text="good" value={good} />
+          <StatisticLine text="neutral" value={neutral} />
+          <StatisticLine text="bad" value={bad} />
+          <StatisticLine text="all" value={totalVotes} />
+          <StatisticLine text="average" value={averageScore} />
+          <StatisticLine text="positive" value={positiveFeedbackPercentage} />
+        </table>
       </>
     )
   }
-  else
-  {
-    return(
+  else {
+    return (
       <></>
     )
   }
@@ -60,7 +80,7 @@ const App = () => {
   return (
     <div>
       <h1>give feedback</h1>
-      <Feedback handlers={ {handleGood, handleNeutral, handleBad} }/>
+      <Feedback handlers={{ handleGood, handleNeutral, handleBad }} />
       <Statistics isFeedbackGathered={isFeedbackGathered} good={good} neutral={neutral} bad={bad} />
     </div>
   )
