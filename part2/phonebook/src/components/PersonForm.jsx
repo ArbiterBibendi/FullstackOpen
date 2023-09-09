@@ -1,29 +1,17 @@
 import React from 'react';
 import { useState } from 'react'
 
+const emptyPerson = {
+    name: '',
+    number: '',
+    id: 0
+};
 const PersonForm = ({ persons, addPerson }) => {
-    const [newPerson, setNewPerson] = useState(
-        {
-            name: '',
-            number: '',
-            id: 0
-        }
-    );
+    const [newPerson, setNewPerson] = useState(emptyPerson);
     const submitPerson = (e) => {
-        const name = newPerson.name;
         e.preventDefault();
-        setNewPerson(
-            {
-                name: '',
-                number: '',
-                id: 0
-            })
-
-        if (persons.find((person) => person.name.toLowerCase() == name.toLowerCase())) {
-            alert(`${name} is already added to the phonebook`)
-            return;
-        }
         addPerson(newPerson);
+        setNewPerson(emptyPerson);
     }
     return (
         <form>
