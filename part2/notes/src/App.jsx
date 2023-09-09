@@ -62,9 +62,9 @@ const App = () => {
         show {showAll ? 'important' : 'all'}
       </button>
       <ul>
-        {notesToShow.map(note =>
-          <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)} />
-        )}
+        {
+          notesToShow.map(note => <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)} />)
+        }
       </ul>
       <form onSubmit={addNote}>
         <input onChange={handleNoteChange} value={newNote} />
