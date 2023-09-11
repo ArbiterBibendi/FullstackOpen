@@ -1,7 +1,26 @@
 import { React, useState } from 'react';
 import axios from 'axios'
 import { useEffect } from 'react';
+import './services/weatherService';
+import weatherService from './services/weatherService';
 
+
+const Weather = ({ weather, country }) => {
+  if (Object.keys(weather).length < 1)
+    return <></>
+
+  return (
+    <div>
+      <h2>
+        Weather in {country.capital[0]}
+      </h2>
+      <p>temperature {weather.main.temp} Celcius</p>
+      <img src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@4x.png`} />
+      <p>wind {weather.wind.speed} m/s</p>
+    </div>
+  )
+
+}
 const CountryDisplay = ({ countryData, filter, waiting }) => {
   const MAX_COUNTRIES = 10
   const filteredCountries = countryData.filter((country) => {
@@ -20,26 +39,35 @@ const CountryDisplay = ({ countryData, filter, waiting }) => {
     return <p>Too many matches, specify another filter</p>
   }
   else {
-    return <Country country={filteredCountries[0]}/>
+    return <Country country={filteredCountries[0]} />
   }
 }
 const Country = ({ country }) => {
+  const [weather, setWeather] = useState({})
+  useEffect(() => {
+    weatherService
+      .getWeatherData(country.capitalInfo.latlng[0], country.capitalInfo.latlng[1])
+      .then((weather) => {
+        setWeather(weather)
+      });
+  }, [])
   return (
     <div>
       <h1>{country.name.common}</h1>
 
       <div>
-      <p>capital {country.capital[0]}</p>
-      <p>area {country.area}</p>
+        <p>capital {country.capital[0]}</p>
+        <p>area {country.area}</p>
       </div>
 
-      <b>languages:</b>
+      <h3>languages:</h3>
       <ul>
         {
           Object.values(country.languages).map((language) => <li key={language}>{language}</li>)
         }
       </ul>
       <img src={country.flags.png} />
+      <Weather key={country.name.common} weather={weather} country={country} />
     </div>
   )
 }
