@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "build:ui": "@powershell Remove-Item -Recurse -Force dist && cd ../../part2/phonebook && npm run build && @powershell Copy-Item dist ../../part3/phonebookbackend -Recurse",
+    "deploy:full": "npm run build:ui && git add . && git commit -m deploy && git push"
   },
   "author": "Drake Scott",
   "license": "ISC",

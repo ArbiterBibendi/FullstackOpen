@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const app = express();
 app.use(cors());
+app.use(express.static('dist'));
 app.use(express.json());
 app.use(morgan(function (tokens, req, res) {
     return [
@@ -82,7 +83,7 @@ app.post('/api/persons', (request, response) => {
     response.send(person);
 });
 
-
-app.listen(3001, () => {
-    console.log('Listening');
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+    console.log('Listening on port ' + PORT);
 });
