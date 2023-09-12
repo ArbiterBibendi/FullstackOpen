@@ -1,8 +1,8 @@
 import axios from 'axios'
-const baseurl = 'http://localhost:3001/notes'
+const baseUrl = 'http://localhost:3001/api/notes'
 
 const getAll = () => {
-    const request = axios.get(baseurl);
+    const request = axios.get(baseUrl);
     const nonExisting = {
         id: 10000,
         content: 'This note is not saved to server',
@@ -17,7 +17,7 @@ const create = (newObject) => {
 }
 
 const update = (id, newObject) => {
-    const request = axios.put(`${baseurl}/${id}`, newObject);
+    const request = axios.put(`${baseUrl}/${id}`, newObject);
     return request.then(response => response.data);
 }
 
