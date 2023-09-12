@@ -7,7 +7,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:ui": "@powershell Remove-Item -Recurse -Force dist && cd ../notes && npm run build && @powershell Copy-Item dist ../backend",
+    "build:ui": "@powershell Remove-Item -Recurse -Force dist && cd ../notes && npm run build && @powershell Copy-Item dist ../backend -Recurse",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
   },
   "author": "Drake Scott",
