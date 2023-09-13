@@ -18,19 +18,19 @@ app.use(morgan(function (tokens, req, res) {
 }));
 
 
-app.get('/api/persons', (request, response) => {
-    console.log(response);
-    Person.find({}).then((results) => {
-        response.json(results);
-    });
+app.get('/api/persons', (request, response, next) => {
+    Person
+        .find({}).then((results) => {
+            response.json(results);
+        })
+        .catch(e => next(e));
 });
-app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id);
-    const person = phonebook.find((person) => person.id === id);
-    if (!person) {
-        return response.status(404).end()
-    }
-    response.json(person);
+app.get('/api/persons/:id', (request, response, next) => {
+    Person.findById(request.params.id)
+    .then(person => {
+        response.json(person);
+    })
+    .catch(e => next(e));
 });
 app.get('/info', (request, response) => {
     response.send(
@@ -38,12 +38,12 @@ app.get('/info', (request, response) => {
         `<p>${Date()}</p>`
     );
 });
-app.delete('/api/persons/:id', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
     Person.findByIdAndDelete(request.params.id)
         .then(result => response.status(204).end())
-        .catch(e => esponse.status(500).end());
+        .catch(e => next(e));
 });
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
     const body = request.body;
     if (!body.name) {
         response.status(400);
@@ -57,10 +57,28 @@ app.post('/api/persons', (request, response) => {
         name: body.name,
         number: body.number
     });
-    person.save().then(result => {
-        response.json(result);
-    });
+    person
+        .save().then(result => {
+            response.json(result);
+        })
+        .catch(e => next(e));
 });
+app.put('/api/persons/:id', (request, response, next) => {
+    const person = {
+        name: request.body.name,
+        number: request.body.number
+    }
+    Person.findByIdAndUpdate(request.params.id, person, { new: true })
+        .then(result => response.json(result))
+        .catch(e => next(e));
+});
+
+const errorHandler = (error, request, response, next) => {
+    response.status(500).end();
+    next(error);
+}
+app.use(errorHandler);
+
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
