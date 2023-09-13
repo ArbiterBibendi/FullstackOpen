@@ -39,10 +39,9 @@ app.get('/info', (request, response) => {
     );
 });
 app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id);
-    phonebook = phonebook.filter((person) => person.id !== id);
-    response.status(202);
-    response.end();
+    Person.findByIdAndDelete(request.params.id)
+        .then(result => response.status(204).end())
+        .catch(e => esponse.status(500).end());
 });
 app.post('/api/persons', (request, response) => {
     const body = request.body;
