@@ -3,17 +3,17 @@ Content-Type: application/json
 
 {
     "name": "monday2",
-    "number": "1234556"
+    "number": "555-5555555"
 }
 ###
 GET http://localhost:3001/api/persons
 ###
 DELETE http://localhost:3001/api/persons/6501378af32cbe858576278b
 ###
-PUT http://localhost:3001/api/persons/65013d7bcfb8523dcdee5b52
+PUT http://localhost:3001/api/persons/6501f7ae95340d5a07a2f06b
 Content-Type: application/json
 
 {
-    "name": "m",
-    "number": "123"
+    "name": "monday",
+    "number": "555-5555555"
 }
