@@ -8,4 +8,12 @@ Content-Type: application/json
 ###
 GET http://localhost:3001/api/persons
 ###
-DELETE http://localhost:3001/api/persons/65013da1cfb8523dcdee5b5b
+DELETE http://localhost:3001/api/persons/6501378af32cbe858576278b
+###
+PUT http://localhost:3001/api/persons/65013d7bcfb8523dcdee5b52
+Content-Type: application/json
+
+{
+    "name": "m",
+    "number": "123"
+}

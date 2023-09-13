@@ -68,13 +68,14 @@ app.put('/api/persons/:id', (request, response, next) => {
         name: request.body.name,
         number: request.body.number
     }
-    Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    Person.findByIdAndUpdate(request.params.id, person, { new: true, runValidators: true, context: 'query' })
         .then(result => response.json(result))
         .catch(e => next(e));
 });
 
 const errorHandler = (error, request, response, next) => {
-    response.status(500).end();
+    console.log(error.message);
+    response.status(500).send(error.message);
     next(error);
 }
 app.use(errorHandler);

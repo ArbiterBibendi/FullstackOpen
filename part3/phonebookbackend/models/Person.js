@@ -3,7 +3,11 @@ const mongoose = require('mongoose');
 const URL = process.env.MONGODB_URI;
 
 const personSchema = mongoose.Schema({
-    name: String,
+    name: {
+        type: String,
+        minLength: [3, 'Name must be atleast 3 characters'],
+        required: true
+    },
     number: String
 });
 mongoose.set('strictQuery', false);
