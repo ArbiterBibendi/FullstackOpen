@@ -35,14 +35,7 @@ const App = () => {
   const checkNameExists = (name) => {
     return persons.find((currentPerson) => currentPerson.name.toLowerCase() == name.toLowerCase())
   }
-  const generateId = () => {
-    let highestId = 0;
-    persons.forEach((person) => {
-      if (person.id > highestId) {
-        highestId = person.id;
-      }
-    })
-  }
+
   const updatePerson = (personToUpdate, replaceWith) => {
     return (
       personsService
@@ -57,15 +50,16 @@ const App = () => {
             }
           });
           setPersons(updatedPersons);
-          notify(`Updated ${existingPerson.name}`);
+          notify(`Updated ${personToUpdate.name}`);
         })
         .catch((error) => {
+          console.log(error);
           notifyError(`Information of ${personToUpdate.name} has already been removed from server`);
         })
     )
   }
   const addPerson = (personToAdd) => {
-    const newPerson = { ...personToAdd, id: generateId() } // NEED TO UPDATE STATE AND DB STILL
+    const newPerson = { ...personToAdd } // NEED TO UPDATE STATE AND DB STILL
     const existingPerson = checkNameExists(newPerson.name);
     const confirmUpdate = () => window.confirm(`${newPerson.name} is already added to the phonebook, replace the old number with a new one?`);
     if (existingPerson) {
