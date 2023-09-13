@@ -27,10 +27,10 @@ app.get('/api/persons', (request, response, next) => {
 });
 app.get('/api/persons/:id', (request, response, next) => {
     Person.findById(request.params.id)
-    .then(person => {
-        response.json(person);
-    })
-    .catch(e => next(e));
+        .then(person => {
+            response.json(person);
+        })
+        .catch(e => next(e));
 });
 app.get('/info', (request, response) => {
     response.send(
@@ -75,7 +75,13 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 const errorHandler = (error, request, response, next) => {
     console.log(error.message);
-    response.status(500).send(error.message);
+    switch (error.name) {
+        case 'ValidationError':
+            response.status(400).send(error.message);
+            break;
+        default:
+            response.status(500).send(error.message);
+    }
     next(error);
 }
 app.use(errorHandler);
