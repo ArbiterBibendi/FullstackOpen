@@ -18,6 +18,7 @@ const App = () => {
   }, []);
 
   const notify = (message) => {
+    console.log(message);
     setNotification({
       message,
       isError: false
@@ -25,6 +26,7 @@ const App = () => {
     setTimeout(() => setNotification(emptyNotification), 5000);
   }
   const notifyError = (message) => {
+    console.log(message);
     setNotification({
       message,
       isError: true
@@ -52,9 +54,8 @@ const App = () => {
           setPersons(updatedPersons);
           notify(`Updated ${personToUpdate.name}`);
         })
-        .catch((error) => {
-          console.log(error);
-          notifyError(`Information of ${personToUpdate.name} has already been removed from server`);
+        .catch((e) => {
+          notifyError(e.response.data);
         })
     )
   }
@@ -75,6 +76,9 @@ const App = () => {
         setPersons(newPersons);
         notify(`Added ${newPerson.name}`);
       })
+      .catch((e) => {
+        notifyError(e.response.data)
+      });
   }
   const deletePerson = (personToDelete) => {
     if (!window.confirm(`Delete ${personToDelete.name} ?`)) {
