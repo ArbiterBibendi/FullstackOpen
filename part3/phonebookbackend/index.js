@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
+const Person = require('./models/Person');
 const app = express();
 app.use(cors());
 app.use(express.static('dist'));
@@ -15,30 +17,12 @@ app.use(morgan(function (tokens, req, res) {
     ].join(' ');
 }));
 
-let phonebook = [
-    {
-        "id": 1,
-        "name": "Arto Hellas",
-        "number": "040-123456"
-    },
-    {
-        "id": 2,
-        "name": "Ada Lovelace",
-        "number": "39-44-5323523"
-    },
-    {
-        "id": 3,
-        "name": "Dan Abramov",
-        "number": "12-43-234345"
-    },
-    {
-        "id": 4,
-        "name": "Mary Poppendieck",
-        "number": "39-23-6423122"
-    }
-]
+
 app.get('/api/persons', (request, response) => {
-    response.json(phonebook);
+    console.log(response);
+    Person.find({}).then((results) => {
+        response.json(results);
+    });
 });
 app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id);
@@ -70,17 +54,13 @@ app.post('/api/persons', (request, response) => {
         response.status(400);
         return response.json({ error: 'number is missing' });
     }
-    else if (phonebook.find((person) => person.name.toLowerCase() == body.name.toLowerCase())) {
-        response.status(400);
-        return response.json({ error: 'name must be unique' });
-    }
-    const person = {
+    const person = new Person({
         name: body.name,
-        id: Math.floor(Math.random() * 999999999999999),
         number: body.number
-    }
-    phonebook = phonebook.concat(person);
-    response.send(person);
+    });
+    person.save().then(result => {
+        response.json(result);
+    });
 });
 
 const PORT = process.env.PORT || 3001;
