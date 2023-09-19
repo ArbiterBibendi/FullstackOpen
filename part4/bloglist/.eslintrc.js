@@ -22,5 +22,9 @@ module.exports = {
     'ecmaVersion': 'latest',
   },
   'rules': {
+    'linebreak-style': [
+      'error',
+      'windows',
+    ],
   },
 };
