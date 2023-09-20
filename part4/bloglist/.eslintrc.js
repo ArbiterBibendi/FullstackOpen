@@ -9,6 +9,7 @@ module.exports = {
     {
       'env': {
         'node': true,
+        'jest': true,
       },
       'files': [
         '.eslintrc.{js,cjs}',
