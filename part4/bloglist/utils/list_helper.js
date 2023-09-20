@@ -16,9 +16,27 @@ const favoriteBlog = (blogs) => {
   }, null);
   return mostLiked;
 };
+
+const mostBlogs = (blogs) => {
+  let authors = [];
+  blogs.forEach((blog) => {
+    const author = authors.find((author) => {
+      return blog.author === author.author;
+    });
+    if (author === undefined) {
+      authors = [...authors, {author: blog.author, blogs: 1}];
+    } else {
+      author.blogs++;
+    }
+  });
+  return authors.reduce((acc, author) => {
+    return acc?.blogs > author?.blogs ? acc : author;
+  }, null);
+};
 favoriteBlog([{likes: 2}, {likes: 5}]);
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
+  mostBlogs,
 };
