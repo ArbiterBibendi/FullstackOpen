@@ -5,9 +5,7 @@ if (process.argv.length < 3) {
 	process.exit();
 }
 
-const password = process.argv[2];
-
-const url = `mongodb+srv://bibendi:${password}@cluster0.nf3xyqx.mongodb.net/noteApp?retryWrites=true&w=majority`;
+const url = process.env.TEST_MONGODB_URI;
 
 mongoose.set('strictQuery', false);
 mongoose.connect(url);
