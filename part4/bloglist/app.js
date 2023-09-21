@@ -11,6 +11,5 @@ mongoose.connect(config.MONGODB_URI);
 app.use(cors());
 app.use(express.json());
 app.use('/api/blogs', router);
-console.log('TEST');
 
 module.exports = app;
