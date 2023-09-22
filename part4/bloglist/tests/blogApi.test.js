@@ -15,7 +15,15 @@ beforeEach(async () => {
 
 test('GET /api/blogs returns correct amount of notes', async () => {
   const blogs = (await api.get('/api/blogs')).body;
+  console.log(blogs);
   expect(blogs.length).toBe(initialBlogs.length);
+});
+
+test('every blog has a field named \'id\'', async () => {
+  const blogs = (await api.get('/api/blogs')).body;
+  for (const blog of blogs) {
+    expect(blog.id).toBeDefined();
+  }
 });
 
 
