@@ -31,6 +31,13 @@ const initialBlogs = [
   },
 ];
 
+const newBlog = {
+  title: 'Test Title 6',
+  author: 'Winny Vest',
+  url: 'kk3bdjg558',
+  likes: 7,
+};
 module.exports = {
   initialBlogs,
+  newBlog,
 };
