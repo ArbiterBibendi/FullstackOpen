@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
-const {initialBlogs, newBlog} = require('../utils/api_test_helper');
+const {
+  initialBlogs,
+  newBlog,
+  likelessBlog,
+} = require('../utils/api_test_helper');
 const Blog = require('../models/blog');
 const supertest = require('supertest');
 const app = require('../app');
@@ -32,6 +36,13 @@ test('POST /api/blogs correctly saves blog', async () => {
   const returnedBlogs = response.body;
 
   expect(returnedBlogs).toContainEqual(expect.objectContaining(newBlog));
+});
+
+test.only('verify validation of \'likes\' field existence', async () => {
+  const response = await api.post('/api/blogs').send(likelessBlog);
+  const returnedBlog = response.body;
+
+  expect(returnedBlog.likes).toBeDefined();
 });
 
 afterAll(() => {

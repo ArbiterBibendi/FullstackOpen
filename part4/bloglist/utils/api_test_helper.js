@@ -37,7 +37,13 @@ const newBlog = {
   url: 'kk3bdjg558',
   likes: 7,
 };
+const likelessBlog = {
+  title: 'Test Title 6',
+  author: 'Winny Vest',
+  url: 'kk3bdjg558',
+};
 module.exports = {
   initialBlogs,
   newBlog,
+  likelessBlog,
 };
