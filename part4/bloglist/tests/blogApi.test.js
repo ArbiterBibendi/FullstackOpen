@@ -22,7 +22,6 @@ beforeEach(async () => {
 
 test('GET /api/blogs returns correct amount of notes', async () => {
   const blogs = (await api.get('/api/blogs')).body;
-  console.log(blogs);
   expect(blogs.length).toBe(initialBlogs.length);
 });
 
@@ -63,8 +62,20 @@ test('DELETE /api/blogs/:id removes blog from database and returns 204',
 
       expect(response.status).toBe(204);
       expect(blogsInDb).not.toContainEqual(firstBlog);
-    });
+    },
+);
 
-afterAll(() => {
-  mongoose.connection.close();
+test('PUT /api/blogs/:id updates blog and returns 200', async () => {
+  const oldBlogs = await getAll(Blog);
+  const oldBlog = oldBlogs[0];
+  const response = await api.put(`/api/blogs/${oldBlog.id}`).send(
+      {...oldBlog, likes: oldBlog.likes+1},
+  );
+  const newBlog = (await Blog.findById(oldBlog.id)).toJSON();
+  expect(newBlog).toMatchObject({...oldBlog, likes: oldBlog.likes+1});
+  expect(response.status).toBe(200);
+});
+
+afterAll(async () => {
+  await mongoose.connection.close();
 });
