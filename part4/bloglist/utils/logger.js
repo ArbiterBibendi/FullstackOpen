@@ -1,13 +1,11 @@
 const log = (...args) => {
   if (process.env.NODE_ENV !== 'test') {
-    console.log(...args);
+    console.log('info:', ...args);
   }
 };
 
 const error = (...args) => {
-  if (process.env.NODE_ENV !== 'test') {
-    console.error(...args);
-  }
+  console.error('logerror:', ...args);
 };
 
 module.exports = {

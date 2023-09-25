@@ -6,6 +6,7 @@ const errorHandler = (error, request, response, next) => {
   } else {
     logger.error(error.message);
   }
+  mongoose.connection.close();
   next(error);
 };
 
