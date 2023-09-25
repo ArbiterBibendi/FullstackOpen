@@ -1,7 +1,7 @@
 const express = require('express');
 const Router = new express.Router();
 const Blog = require('../models/blog');
-
+require('express-async-errors');
 
 Router.get('/', async (request, response) => {
   const blogs = await Blog.find({});
@@ -9,11 +9,14 @@ Router.get('/', async (request, response) => {
 });
 
 Router.post('/', async (request, response) => {
-  if (request.body.likes === undefined) {
-    request.body.likes = 0;
-  }
-  const blog = new Blog(request.body);
-  const result = await blog.save();
+  const blogObject = {
+    title: request.body.title,
+    author: request.body.author,
+    url: request.body.url,
+    likes: request.body.likes === undefined ? 0 : request.body.likes,
+  };
+  const blogModel = new Blog(blogObject);
+  const result = await blogModel.save();
   response.status(201).json(result);
 });
 

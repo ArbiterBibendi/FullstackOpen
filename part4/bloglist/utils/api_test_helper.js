@@ -42,8 +42,18 @@ const likelessBlog = {
   author: 'Winny Vest',
   url: 'kk3bdjg558',
 };
+const titlelessBlog = {
+  author: 'Winny Vest',
+  url: 'kk3bdjg558',
+};
+const urllessBlog = {
+  title: 'Test Title 6',
+  author: 'Winny Vest',
+};
 module.exports = {
   initialBlogs,
   newBlog,
   likelessBlog,
+  titlelessBlog,
+  urllessBlog,
 };

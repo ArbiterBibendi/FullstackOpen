@@ -3,6 +3,8 @@ const {
   initialBlogs,
   newBlog,
   likelessBlog,
+  titlelessBlog,
+  urllessBlog,
 } = require('../utils/api_test_helper');
 const Blog = require('../models/blog');
 const supertest = require('supertest');
@@ -38,11 +40,19 @@ test('POST /api/blogs correctly saves blog', async () => {
   expect(returnedBlogs).toContainEqual(expect.objectContaining(newBlog));
 });
 
-test.only('verify validation of \'likes\' field existence', async () => {
+test('validation of \'likes\' field existence', async () => {
   const response = await api.post('/api/blogs').send(likelessBlog);
   const returnedBlog = response.body;
 
   expect(returnedBlog.likes).toBeDefined();
+});
+
+test.only('missing url or title returns http code 400', async () => {
+  let response = await api.post('/api/blogs').send(titlelessBlog);
+  console.log(response);
+  expect(response.status).toEqual(400);
+  response = await api.post('/api/blogs').send(urllessBlog);
+  expect(response.status).toEqual(400);
 });
 
 afterAll(() => {
