@@ -50,10 +50,14 @@ const urllessBlog = {
   title: 'Test Title 6',
   author: 'Winny Vest',
 };
+const getAll = async (Model) => {
+  return (await Model.find({})).map((model) => model.toJSON());
+};
 module.exports = {
   initialBlogs,
   newBlog,
   likelessBlog,
   titlelessBlog,
   urllessBlog,
+  getAll,
 };
