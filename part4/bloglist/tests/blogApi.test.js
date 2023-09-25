@@ -49,11 +49,21 @@ test('validation of \'likes\' field existence', async () => {
 
 test('missing url or title returns http code 400', async () => {
   let response = await api.post('/api/blogs').send(titlelessBlog);
-  console.log(response);
   expect(response.status).toEqual(400);
   response = await api.post('/api/blogs').send(urllessBlog);
   expect(response.status).toEqual(400);
 });
+
+test('DELETE /api/blogs/:id removes blog from database and returns 204',
+    async () => {
+      let blogsInDb = await getAll(Blog);
+      const firstBlog = blogsInDb[0];
+      const response = await api.delete(`/api/blogs/${firstBlog.id}`);
+      blogsInDb = await getAll(Blog);
+
+      expect(response.status).toBe(204);
+      expect(blogsInDb).not.toContainEqual(firstBlog);
+    });
 
 afterAll(() => {
   mongoose.connection.close();
