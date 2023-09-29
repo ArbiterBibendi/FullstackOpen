@@ -1,14 +1,14 @@
 const express = require('express');
-const Router = new express.Router();
+const blogRouter = new express.Router();
 const Blog = require('../models/blog');
 require('express-async-errors');
 
-Router.get('/', async (request, response) => {
+blogRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({});
   response.json(blogs);
 });
 
-Router.post('/', async (request, response) => {
+blogRouter.post('/', async (request, response) => {
   const blogObject = {
     title: request.body.title,
     author: request.body.author,
@@ -20,13 +20,13 @@ Router.post('/', async (request, response) => {
   response.status(201).json(result);
 });
 
-Router.delete('/:id', async (request, response) => {
+blogRouter.delete('/:id', async (request, response) => {
   const id = request.params.id;
   await Blog.findByIdAndDelete(id);
   response.status(204).end();
 });
 
-Router.put('/:id', async (request, response) => {
+blogRouter.put('/:id', async (request, response) => {
   const body = request.body;
   const id = request.params.id;
   const newBlog = {
@@ -46,4 +46,4 @@ Router.put('/:id', async (request, response) => {
   response.status(200).send(returnedBlog);
 });
 
-module.exports = Router;
+module.exports = blogRouter;

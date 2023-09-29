@@ -9,3 +9,14 @@ Content-Type: application/json
     "url": "String",
     "likes": 2
 }
+###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "drakeee",
+    "password": "scott",
+    "name": "drake"
+}
+###
+GET http://localhost:3003/api/users
