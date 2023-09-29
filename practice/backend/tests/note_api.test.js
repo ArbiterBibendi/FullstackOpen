@@ -9,6 +9,9 @@ const bcrypt = require('bcrypt');
 const Note = require('../models/note');
 const User = require('../models/user');
 
+
+
+
 beforeEach(async () => {
 	await Note.deleteMany({});
 	await Note.insertMany(helper.initialNotes);
@@ -79,6 +82,7 @@ describe('addition of a new note', () => {
 
 		await api
 			.post('/api/notes')
+			.auth(process.env.TEST_USER_TOKEN, {type: 'bearer'})
 			.send(newNote)
 			.expect(201)
 			.expect('Content-Type', /application\/json/);
@@ -99,6 +103,7 @@ describe('addition of a new note', () => {
 
 		await api
 			.post('/api/notes')
+			.auth(process.env.TEST_USER_TOKEN, {type: 'bearer'})
 			.send(newNote)
 			.expect(400);
 
@@ -115,6 +120,7 @@ describe('deletion of a note', () => {
 
 		await api
 			.delete(`/api/notes/${noteToDelete.id}`)
+			.auth(process.env.TEST_USER_TOKEN, {type: 'bearer'})
 			.expect(204);
 
 		const notesAtEnd = await helper.notesInDb();
