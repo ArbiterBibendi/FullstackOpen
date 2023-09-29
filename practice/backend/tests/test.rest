@@ -8,9 +8,21 @@ Content-Type: application/json
 ###
 POST http://localhost:3001/api/notes
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRyYWtlIiwiaWQiOiI2NTE1ZjVkNzdlZmUxMmQyNDU3NjgxMjAiLCJpYXQiOjE2OTU5NDA2ODZ9.G5rFS_Vl9n2sZI8gc3Iv7ATLFRk08ASqeHoSArUD6rk
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY1MTYwZGRiOWM3MGFjOWI3NWQxM2M1NyIsImlhdCI6MTY5NTk1MTY3MSwiZXhwIjoxNjk1OTU1MjcxfQ.eAMrLCORDJ0_SmqHRAoGWwTgXzi_ZPHQn19oUHx0v3c
 
 {
     "content": "drake",
     "importnant": true
+}
+###
+GET http://localhost:3001/api/users
+###
+GET http://localhost:3001/api/notes/65162b4a2a5fc05f171eac78
+###
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+    "username": "drake",
+    "password": "scott"
 }
