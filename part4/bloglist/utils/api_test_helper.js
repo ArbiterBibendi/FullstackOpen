@@ -53,6 +53,36 @@ const urllessBlog = {
 const getAll = async (Model) => {
   return (await Model.find({})).map((model) => model.toJSON());
 };
+
+const initalUser = {
+  username: 'test',
+  passwordHash: 'itdoesntreallymatter',
+  name: 'test',
+};
+const validNewUser = {
+  username: 'test1',
+  password: 'test',
+  name: 'test',
+};
+const invalidUsers = [
+  {
+    username: 'te',
+    password: 'test',
+    name: 'test',
+  },
+  {
+    username: 'test',
+    password: 'test',
+    name: 'test',
+  },
+  {
+    username: 'test',
+    password: 'te',
+    name: 'test',
+  },
+];
+
+
 module.exports = {
   initialBlogs,
   newBlog,
@@ -60,4 +90,7 @@ module.exports = {
   titlelessBlog,
   urllessBlog,
   getAll,
+  initalUser,
+  validNewUser,
+  invalidUsers,
 };
