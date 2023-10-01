@@ -2,6 +2,7 @@ const express = require('express');
 const blogRouter = new express.Router();
 const Blog = require('../models/blog');
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
 require('express-async-errors');
 
 blogRouter.get('/', async (request, response) => {
@@ -12,24 +13,34 @@ blogRouter.get('/', async (request, response) => {
 });
 
 blogRouter.post('/', async (request, response) => {
-  // Assign a random user to each submitted blog for now
-  usersInDb = await User.find({});
-  const randomIndex = Math.floor(Math.random() * usersInDb.length);
-  const randomUser = usersInDb[randomIndex];
-  const randomUserId = randomUser._id;
-
+  const authorization = request.get('Authorization');
+  const bearerRegex = /^Bearer /i;
+  let token = undefined;
+  if (bearerRegex?.test(authorization)) {
+    token = authorization.replace(bearerRegex, '');
+  } else {
+    response.status(400).json({error: 'missing authorization header'});
+    return;
+  }
+  const userToken = jwt.verify(token, process.env.JWT_SECRET);
+  const user = await User.findById(userToken?.id);
+  console.log(userToken);
+  if (!user || !userToken) {
+    response.status(401).json({error: 'not logged in'});
+    return;
+  }
   const blogObject = {
     title: request.body.title,
     author: request.body.author,
     url: request.body.url,
     likes: request.body.likes === undefined ? 0 : request.body.likes,
-    user: randomUserId,
+    user: user.id,
   };
   const blogModel = new Blog(blogObject);
   const result = await blogModel.save();
 
-  randomUser.blogs = randomUser.blogs.concat(result._id);
-  await randomUser.save();
+  user.blogs = user.blogs.concat(result._id);
+  await user.save();
   response.status(201).json(result);
 });
 
