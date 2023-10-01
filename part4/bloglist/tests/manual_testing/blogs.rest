@@ -2,7 +2,7 @@ GET http://localhost:3003/api/blogs
 ###
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hbnVhbF90ZXN0X3VzZXIiLCJpZCI6IjY1MTlmODFlZDk3ZmQ0OGIzODk0MTk3YyIsImlhdCI6MTY5NjIwMTkxNn0.Ci2F_LtkzQQY5X-j8PudxsSFS91G4JZV8ewlttarmlA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hbnVhbF90ZXN0X3VzZXIiLCJpZCI6IjY1MTlmODFlZDk3ZmQ0OGIzODk0MTk3YyIsImlhdCI6MTY5NjIwNDA1NH0.LUDc96h_3TxyGdS2HjUkWPebWumMaHSqQ3OSOBDhZk4
 
 {
     "title": "Tuesday",

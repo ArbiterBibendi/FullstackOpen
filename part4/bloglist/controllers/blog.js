@@ -13,21 +13,14 @@ blogRouter.get('/', async (request, response) => {
 });
 
 blogRouter.post('/', async (request, response) => {
-  const authorization = request.get('Authorization');
-  const bearerRegex = /^Bearer /i;
-  let token = undefined;
-  if (bearerRegex?.test(authorization)) {
-    token = authorization.replace(bearerRegex, '');
-  } else {
-    response.status(400).json({error: 'missing authorization header'});
-    return;
-  }
-  const userToken = jwt.verify(token, process.env.JWT_SECRET);
-  const user = await User.findById(userToken?.id);
-  console.log(userToken);
-  if (!user || !userToken) {
+  if (!request.token) {
     response.status(401).json({error: 'not logged in'});
     return;
+  }
+  const userFromToken = jwt.verify(request.token, process.env.JWT_SECRET);
+  const user = await User.findById(userFromToken?.id);
+  if (!user) {
+    throw new Error('could not find user');
   }
   const blogObject = {
     title: request.body.title,
