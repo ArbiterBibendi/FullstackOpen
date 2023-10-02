@@ -39,6 +39,12 @@ blogRouter.post('/', async (request, response) => {
 
 blogRouter.delete('/:id', async (request, response) => {
   const id = request.params.id;
+  const user = jwt.verify(request.token, process.env.JWT_SECRET);
+  const blog = await Blog.findById(id);
+  if (!user.id || user.id.toString() !== blog?.user.toString()) {
+    response.status(403).json({error: 'you are not authorized'});
+    return;
+  }
   await Blog.findByIdAndDelete(id);
   response.status(204).end();
 });
