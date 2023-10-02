@@ -1,8 +1,7 @@
 const express = require('express');
 const blogRouter = new express.Router();
 const Blog = require('../models/blog');
-const User = require('../models/user');
-const jwt = require('jsonwebtoken');
+
 require('express-async-errors');
 
 blogRouter.get('/', async (request, response) => {
@@ -13,12 +12,12 @@ blogRouter.get('/', async (request, response) => {
 });
 
 blogRouter.post('/', async (request, response) => {
-  if (!request.token) {
+  const user = request.user;
+  if (!user) {
     response.status(401).json({error: 'not logged in'});
     return;
   }
-  const userFromToken = jwt.verify(request.token, process.env.JWT_SECRET);
-  const user = await User.findById(userFromToken?.id);
+
   if (!user) {
     throw new Error('could not find user');
   }
@@ -39,9 +38,15 @@ blogRouter.post('/', async (request, response) => {
 
 blogRouter.delete('/:id', async (request, response) => {
   const id = request.params.id;
-  const user = jwt.verify(request.token, process.env.JWT_SECRET);
   const blog = await Blog.findById(id);
-  if (!user.id || user.id.toString() !== blog?.user.toString()) {
+
+  const user = request.user;
+  if (!user) {
+    response.status(401).json({error: 'not logged in'});
+    return;
+  }
+
+  if (user.id.toString() !== blog?.user?.toString()) {
     response.status(403).json({error: 'you are not authorized'});
     return;
   }
