@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import blogService from '../services/blogs';
 
-const BlogForm = ({ user, blogs, setBlogs }) => {
+const BlogForm = ({ user, blogs, setBlogs, showNotification }) => {
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
     const [url, setUrl] = useState('');
@@ -16,6 +16,7 @@ const BlogForm = ({ user, blogs, setBlogs }) => {
                 user: user.id,
             });
             setBlogs([...blogs, response]);
+            showNotification(`a new blog ${title} by ${author} added`);
         } catch(e) {
             console.error(e);
         }

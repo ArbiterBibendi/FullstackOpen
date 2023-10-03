@@ -3,10 +3,12 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import LoginForm from './components/LoginForm';
 import BlogForm from './components/BlogForm';
+import Notification from './components/Notification';
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null);
+  const [notification, setNotification] = useState({});
 
   useEffect(() => { // get blogs
     blogService.getAll().then(blogs =>
@@ -27,18 +29,37 @@ const App = () => {
     window.localStorage.removeItem('user');
     setUser(null);
   }
+  const showNotification = (text) => {
+    setNotification({ content: text, isError: false });
+    setTimeout(() => {
+      setNotification({ content: null });
+    }, 5000);
+  }
+  const showNotificationError = (text) => {
+    console.log("MONDAY");
+    setNotification({ content: text, isError: true });
+    setTimeout(() => {
+      setNotification({ content: null });
+    }, 5000);
+  }
 
   if (!user) {
-    return <LoginForm setUser={setUser} />;
+    return (
+      <>
+        <Notification notification={notification} />
+        <LoginForm setUser={setUser} showNotificationError={showNotificationError} />;
+      </>
+    )
   }
   return (
     <div>
+      <Notification notification={notification} />
       <h2>blogs</h2>
       <p>
         {user.name} is logged in
         <button onClick={handleLogout}>logout</button>
       </p>
-      <BlogForm user={user} blogs={blogs} setBlogs={setBlogs} />
+      <BlogForm user={user} blogs={blogs} setBlogs={setBlogs} showNotification={showNotification} />
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}

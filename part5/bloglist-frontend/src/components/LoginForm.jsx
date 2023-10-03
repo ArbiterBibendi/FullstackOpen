@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import loginService from '../services/login';
 import blogService from '../services/blogs';
 
-const LoginForm = ({ setUser }) => {
+const LoginForm = ({ setUser, showNotificationError }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const handleLogin = async (e) => {
@@ -12,8 +12,8 @@ const LoginForm = ({ setUser }) => {
             setUser(user);
             window.localStorage.setItem('user', JSON.stringify(user));
             blogService.setToken(user.token);
-        } catch (e) {
-            console.log(e);
+        } catch (error) {
+            showNotificationError('wrong username or password');
         }
     }
     return (
