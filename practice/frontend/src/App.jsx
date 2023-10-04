@@ -88,49 +88,49 @@ const App = () => {
       setNotes(notes.filter((note) => note.id !== id));
     }
   }
-const logout = () => {
-  window.localStorage.removeItem('loggedNoteappUser');
-  setUser(null);
-}
+  const logout = () => {
+    window.localStorage.removeItem('loggedNoteappUser');
+    setUser(null);
+  }
 
 
-const notesToShow = showAll ? notes : notes.filter((note) => note.important === true);
-return (
-  <div>
-    <h1>Notes</h1>
-    <Notification message={errorMessage} />
-    {
-      user && <div>
-        <button onClick={logout}>
-          logout
-        </button>
-        <p>{user.name} logged in</p>
-
-      </div>
-    }
-    {
-      user === null ?
-        <LoginForm
-          handleSubmit={handleSubmit}
-          handleUsernameChange={(e) => setUsername(e.target.value)}
-          handlePasswordChange={(e) => setPassword(e.target.value)}
-          username={username}
-          password={password}
-        /> :
-        <NoteForm handleSubmit={addNote} handleNoteChange={(e) => setNewNote(e.target.value)} newNote={newNote} />
-    }
-    <button onClick={() => setShowAll(!showAll)}>
-      show {showAll ? 'important' : 'all'}
-    </button>
-    <ul>
+  const notesToShow = showAll ? notes : notes.filter((note) => note.important === true);
+  return (
+    <div>
+      <h1>Notes</h1>
+      <Notification message={errorMessage} />
       {
-        notesToShow.map(note => <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)} />)
-      }
-    </ul>
+        user && <div>
+          <button onClick={logout}>
+            logout
+          </button>
+          <p>{user.name} logged in</p>
 
-    <Footer />
-  </div>
-)
+        </div>
+      }
+      {
+        user === null ?
+          <LoginForm
+            handleSubmit={handleSubmit}
+            handleUsernameChange={(e) => setUsername(e.target.value)}
+            handlePasswordChange={(e) => setPassword(e.target.value)}
+            username={username}
+            password={password}
+          /> :
+          <NoteForm handleSubmit={addNote} handleNoteChange={(e) => setNewNote(e.target.value)} newNote={newNote} />
+      }
+      <button onClick={() => setShowAll(!showAll)}>
+        show {showAll ? 'important' : 'all'}
+      </button>
+      <ul>
+        {
+          notesToShow.map(note => <Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id)} />)
+        }
+      </ul>
+
+      <Footer />
+    </div>
+  )
 }
 
 export default App 
