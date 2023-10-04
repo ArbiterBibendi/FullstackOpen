@@ -47,7 +47,7 @@ const App = () => {
     return (
       <>
         <Notification notification={notification} />
-        <LoginForm setUser={setUser} showNotificationError={showNotificationError} />;
+        <LoginForm setUser={setUser} showNotificationError={showNotificationError} />
       </>
     )
   }
