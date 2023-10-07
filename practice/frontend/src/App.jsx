@@ -6,17 +6,16 @@ import Notification from './components/Notification';
 import Footer from './components/Footer';
 import noteService from './services/notes';
 import loginService from './services/login';
+import Togglable from './components/Togglable';
 
 const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
 
   const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('a new note...');
   const [showAll, setShowAll] = useState(true);
 
   const [user, setUser] = useState(null);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  
 
   useEffect(() => { // get all notes
     const asyncFunction = async () => {
@@ -42,39 +41,8 @@ const App = () => {
     }, 5000);
   }
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const returnedUser = await loginService.login({ username, password });
-      window.localStorage.setItem('loggedNoteappUser', JSON.stringify(returnedUser));
-      noteService.setToken(returnedUser.token);
-      setUser(returnedUser);
-      setUsername('');
-      setPassword('');
-    }
-    catch (e) {
-      console.log(e);
-      notifyError('Wrong credentials');
-    }
-  }
-  const addNote = async (e) => {
-    e.preventDefault();
-    const noteObject = {
-      content: newNote,
-      important: Math.random() < 0.5
-    };
 
-    try {
-      const response = await noteService.create(noteObject);
-      setNotes(notes.concat(response));
-      setNewNote('');
-    } catch (e) {
-      console.log(e);
-      if (e.response?.data.error) {
-        notifyError(e.response.data.error);
-      }
-    }
-  }
+
 
   const toggleImportanceOf = async id => {
     const note = notes.find(n => n.id === id)
@@ -88,9 +56,32 @@ const App = () => {
       setNotes(notes.filter((note) => note.id !== id));
     }
   }
+  const login = async (username, password) => {
+    try {
+      const returnedUser = await loginService.login({ username, password });
+      noteService.setToken(returnedUser.token);
+      window.localStorage.setItem('loggedNoteappUser', JSON.stringify(returnedUser));
+      setUser(returnedUser);
+    }
+    catch (e) {
+      console.log(e);
+      notifyError('Wrong credentials');
+    }
+  }
   const logout = () => {
     window.localStorage.removeItem('loggedNoteappUser');
     setUser(null);
+  }
+  const createNote = async (noteObject) => {
+    try {
+      const response = await noteService.create(noteObject);
+      setNotes(notes.concat(response));
+    } catch (e) {
+      console.log(e);
+      if (e.response?.data.error) {
+        notifyError(e.response.data.error);
+      }
+    }
   }
 
 
@@ -108,16 +99,15 @@ const App = () => {
 
         </div>
       }
+
       {
         user === null ?
-          <LoginForm
-            handleSubmit={handleSubmit}
-            handleUsernameChange={(e) => setUsername(e.target.value)}
-            handlePasswordChange={(e) => setPassword(e.target.value)}
-            username={username}
-            password={password}
-          /> :
-          <NoteForm handleSubmit={addNote} handleNoteChange={(e) => setNewNote(e.target.value)} newNote={newNote} />
+          <Togglable key='loginformtogglable' buttonLabel={'login'}>
+            <LoginForm login={login}/>
+          </Togglable> :
+          <Togglable key='noteformtogglable' buttonLabel={'new note'}>
+            <NoteForm createNote={createNote} />
+          </Togglable>
       }
       <button onClick={() => setShowAll(!showAll)}>
         show {showAll ? 'important' : 'all'}
@@ -129,7 +119,7 @@ const App = () => {
       </ul>
 
       <Footer />
-    </div>
+    </div >
   )
 }
 

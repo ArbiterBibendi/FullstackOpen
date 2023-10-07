@@ -1,31 +1,26 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-const LoginForm = ({ handleSubmit, handleUsernameChange, handlePasswordChange, username, password }) => {
-    const [loginVisible, setLoginVisible] = useState(false);
+const LoginForm = ({ login }) => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
-    const hideWhenVisible = { display: loginVisible ? "none" : "" };
-    const showWhenVisible = { display: loginVisible ? "" : "none" };
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        setUsername('');
+        setPassword('');
+        login(username, password);
+    }
+
     return (
-        <>
-            <div style={hideWhenVisible}>
-                <button onClick={() => setLoginVisible(true)}>log in</button>
+        <form onSubmit={handleSubmit}>
+            <div>
+                username<input type='text' value={username} name='Username' onChange={(e) => setUsername(e.target.value)} />
             </div>
             <div>
-
-                <div style={showWhenVisible}>
-                    <form onSubmit={handleSubmit}>
-                        <div>
-                            username<input type='text' value={username} name='Username' onChange={handleUsernameChange} />
-                        </div>
-                        <div>
-                            password<input type='text' value={password} name='Password' onChange={handlePasswordChange} />
-                        </div>
-                        <input type='submit' value='login' />
-                        <button onClick={() => setLoginVisible(false)}>cancel</button>
-                    </form>
-                </div>
+                password<input type='text' value={password} name='Password' onChange={(e) => setPassword(e.target.value)} />
             </div>
-        </>
+            <input type='submit' value='login' />
+        </form>
     );
 }
 
