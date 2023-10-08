@@ -4,6 +4,8 @@ import blogService from './services/blogs'
 import LoginForm from './components/LoginForm';
 import BlogForm from './components/BlogForm';
 import Notification from './components/Notification';
+import Togglable from './components/Togglable';
+
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -36,30 +38,32 @@ const App = () => {
     }, 5000);
   }
   const showNotificationError = (text) => {
-    console.log("MONDAY");
     setNotification({ content: text, isError: true });
     setTimeout(() => {
       setNotification({ content: null });
     }, 5000);
   }
 
-  if (!user) {
-    return (
-      <>
-        <Notification notification={notification} />
-        <LoginForm setUser={setUser} showNotificationError={showNotificationError} />
-      </>
-    )
-  }
+  const loggedIn = (
+    <>
+      <p>
+        {user?.name} is logged in
+        <button onClick={handleLogout}>logout</button>
+      </p>
+      <Togglable buttonLabel='new blog'>
+        <BlogForm user={user} blogs={blogs} setBlogs={setBlogs} showNotification={showNotification} />
+      </Togglable>
+    </>
+  );
+  const loggedOut = (
+    <LoginForm setUser={setUser} showNotificationError={showNotificationError} />
+  );
   return (
     <div>
       <Notification notification={notification} />
       <h2>blogs</h2>
-      <p>
-        {user.name} is logged in
-        <button onClick={handleLogout}>logout</button>
-      </p>
-      <BlogForm user={user} blogs={blogs} setBlogs={setBlogs} showNotification={showNotification} />
+      {user ? loggedIn : loggedOut}
+
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
