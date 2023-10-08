@@ -50,7 +50,7 @@ const App = () => {
         {user?.name} is logged in
         <button onClick={handleLogout}>logout</button>
       </p>
-      <Togglable buttonLabel='new blog'>
+      <Togglable showLabel='new blog'>
         <BlogForm user={user} blogs={blogs} setBlogs={setBlogs} showNotification={showNotification} />
       </Togglable>
     </>
