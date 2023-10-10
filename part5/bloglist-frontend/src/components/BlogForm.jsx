@@ -13,8 +13,8 @@ const BlogForm = ({ user, blogs, setBlogs, showNotification }) => {
                 title,
                 author,
                 url,
-                user: user.id,
             });
+            response.user = user;
             setBlogs([...blogs, response]);
             showNotification(`a new blog ${title} by ${author} added`);
         } catch(e) {

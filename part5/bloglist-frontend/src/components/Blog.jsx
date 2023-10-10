@@ -18,7 +18,6 @@ const Blog = ({ blog }) => {
           {`likes ${blog.likes} `}
           <button onClick={() => { return null }} >like</button>
         </div>
-        <p>{blog.author}</p>
         <p>{blog.user.name}</p>
       </Togglable>
     </div>
