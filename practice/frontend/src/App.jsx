@@ -1,45 +1,45 @@
-import { useState, useEffect, useRef } from 'react';
-import Note from './components/Note';
-import LoginForm from './components/LoginForm';
-import NoteForm from './components/NoteForm';
-import Notification from './components/Notification';
-import Footer from './components/Footer';
-import noteService from './services/notes';
-import loginService from './services/login';
-import Togglable from './components/Togglable';
+import { useState, useEffect, useRef } from 'react'
+import Note from './components/Note'
+import LoginForm from './components/LoginForm'
+import NoteForm from './components/NoteForm'
+import Notification from './components/Notification'
+import Footer from './components/Footer'
+import noteService from './services/notes'
+import loginService from './services/login'
+import Togglable from './components/Togglable'
 
 const App = () => {
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null)
 
   const [notes, setNotes] = useState([])
-  const [showAll, setShowAll] = useState(true);
+  const [showAll, setShowAll] = useState(true)
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null)
 
-  const noteFormRef = useRef();
+  const noteFormRef = useRef()
 
   useEffect(() => { // get all notes
     const asyncFunction = async () => {
-      const initialNotes = await noteService.getAll();
-      setNotes(initialNotes);
+      const initialNotes = await noteService.getAll()
+      setNotes(initialNotes)
     }
-    asyncFunction();
-  }, []);
+    asyncFunction()
+  }, [])
 
   useEffect(() => { // get logged in user from local storage
-    const loggedInUser = window.localStorage.getItem('loggedNoteappUser');
+    const loggedInUser = window.localStorage.getItem('loggedNoteappUser')
     if (loggedInUser) {
-      const user = JSON.parse(loggedInUser);
-      setUser(user);
-      noteService.setToken(user.token);
+      const user = JSON.parse(loggedInUser)
+      setUser(user)
+      noteService.setToken(user.token)
     }
-  }, []);
+  }, [])
 
   const notifyError = (message) => {
-    setErrorMessage(message);
+    setErrorMessage(message)
     setTimeout(() => {
-      setErrorMessage(null);
-    }, 5000);
+      setErrorMessage(null)
+    }, 5000)
   }
 
 
@@ -50,44 +50,44 @@ const App = () => {
     const changedNote = { ...note, important: !note.important }
 
     try {
-      const returnedNote = await noteService.update(id, changedNote);
-      setNotes(notes.map(note => note.id !== id ? note : returnedNote));
+      const returnedNote = await noteService.update(id, changedNote)
+      setNotes(notes.map(note => note.id !== id ? note : returnedNote))
     } catch (e) {
-      notifyError(`The note '${note.content}' was already deleted from the server`);
-      setNotes(notes.filter((note) => note.id !== id));
+      notifyError(`The note '${note.content}' was already deleted from the server`)
+      setNotes(notes.filter((note) => note.id !== id))
     }
   }
   const login = async (username, password) => {
     try {
-      const returnedUser = await loginService.login({ username, password });
-      noteService.setToken(returnedUser.token);
-      window.localStorage.setItem('loggedNoteappUser', JSON.stringify(returnedUser));
-      setUser(returnedUser);
+      const returnedUser = await loginService.login({ username, password })
+      noteService.setToken(returnedUser.token)
+      window.localStorage.setItem('loggedNoteappUser', JSON.stringify(returnedUser))
+      setUser(returnedUser)
     }
     catch (e) {
-      console.log(e);
-      notifyError('Wrong credentials');
+      console.log(e)
+      notifyError('Wrong credentials')
     }
   }
   const logout = () => {
-    window.localStorage.removeItem('loggedNoteappUser');
-    setUser(null);
+    window.localStorage.removeItem('loggedNoteappUser')
+    setUser(null)
   }
   const createNote = async (noteObject) => {
-    noteFormRef.current.toggleVisibility();
+    noteFormRef.current.toggleVisibility()
     try {
-      const response = await noteService.create(noteObject);
-      setNotes(notes.concat(response));
+      const response = await noteService.create(noteObject)
+      setNotes(notes.concat(response))
     } catch (e) {
-      console.log(e);
+      console.log(e)
       if (e.response?.data.error) {
-        notifyError(e.response.data.error);
+        notifyError(e.response.data.error)
       }
     }
   }
 
 
-  const notesToShow = showAll ? notes : notes.filter((note) => note.important === true);
+  const notesToShow = showAll ? notes : notes.filter((note) => note.important === true)
   return (
     <div>
       <h1>Notes</h1>
@@ -125,4 +125,4 @@ const App = () => {
   )
 }
 
-export default App 
+export default App
