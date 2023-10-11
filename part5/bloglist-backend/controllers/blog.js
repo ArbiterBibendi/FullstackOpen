@@ -50,23 +50,15 @@ blogRouter.delete('/:id', async (request, response) => {
   response.status(204).end();
 });
 
+/* likes only for now */
 blogRouter.put('/:id', async (request, response) => {
   const body = request.body;
   const id = request.params.id;
-  const user = request.user;
   const blogToReplace = await Blog.findById(id);
 
-  if (user?.id.toString() != blogToReplace?.user?.toString()) {
-    response.status(403).json({error: 'not authorized'});
-    return;
-  }
-
-  blogToReplace.title = body.title;
-  blogToReplace.author = body.author;
-  blogToReplace.url = body.url;
   blogToReplace.likes = body.likes;
-  await blogToReplace.save();
 
+  await blogToReplace.save();
   response.status(200).json(blogToReplace);
 });
 
