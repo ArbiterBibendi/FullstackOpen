@@ -55,9 +55,18 @@ const App = () => {
   const getSortedBlogComponents = () => {
     const sortedBlogs = blogs.sort(compareFn);
     const sortedBlogComponents = sortedBlogs.map(blog =>
-      <Blog key={blog.id} blog={blog} handleLike={handleLike} />
+      <Blog key={blog.id} blog={blog} user={user} handleLike={handleLike} handleRemove={handleRemove} />
     );
     return sortedBlogComponents;
+  }
+
+  const handleRemove = async (blog) => {
+    const confirmed = window.confirm(`Remove blog ${blog.title} by ${blog.author}`);
+    if (!confirmed) {
+      return;
+    }
+    await blogService.deleteBlog(blog);
+    setBlogs(blogs.filter((value) => blog !== value));
   }
 
   const loggedIn = (
