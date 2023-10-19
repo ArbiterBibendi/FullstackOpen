@@ -1,0 +1,11 @@
+{
+    "presets": [
+        "preset-env",
+        [
+            "preset-react",
+            {
+                "runtime": "automatic"
+            }
+        ]
+    ]
+}
