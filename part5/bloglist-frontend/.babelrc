@@ -1,8 +1,8 @@
 {
     "presets": [
-        "preset-env",
+        "@babel/preset-env",
         [
-            "preset-react",
+            "@babel/preset-react",
             {
                 "runtime": "automatic"
             }
